@@ -718,15 +718,51 @@
         }
 
         function addFriend() {
+            // 1. 沒登入不准加好友！
+            if (!currentUser) {
+                alert('⚠️ 請先在左側註冊並登入帳號，才能使用加好友功能！');
+                return;
+            }
+
             const input = document.getElementById('friend-name-input');
             const name = input.value.trim();
             if (!name) return;
-            if (name === currentUser) { alert('不能加自己為好友！'); return; }
-            if (friendsList.some(f => f.name === name)) { alert('這位好友已經在名單裡了！'); return; }
-            friendsList.push({ name });
-            localStorage.setItem('sandbox_friends_v2', JSON.stringify(friendsList));
-            input.value = '';
-            renderFriendList();
+            if (name === currentUser) { alert('⚠️ 不能加自己為好友！'); return; }
+            if (friendsList.some(f => f.name === name)) { alert('⚠️ 這位好友已經在名單裡了！'); return; }
+
+            if (!peer || peer.destroyed) initOnlinePresence();
+
+            const statusEl = document.getElementById('pvp-status-msg');
+            statusEl.innerText = `🔍 正在驗證玩家【${name}】是否存在並在線...`;
+
+            // 2. 向 PeerJS 真實探测這個帳號有沒有上線
+            const targetId = 'hmrpg-user-' + encodeURIComponent(name);
+            const probeConn = peer.connect(targetId);
+            let verified = false;
+
+            const timeout = setTimeout(() => {
+                if (!verified) {
+                    probeConn.close();
+                    statusEl.innerText = `❌ 找不到玩家【${name}】（未註冊或目前不在線）`;
+                    alert(`❌ 找不到玩家【${name}】！\n請確認對方已經註冊登入，且目前停留在公會大廳。`);
+                }
+            }, 3500);
+
+            probeConn.on('open', () => {
+                verified = true;
+                clearTimeout(timeout);
+                friendsList.push({ name });
+                localStorage.setItem('sandbox_friends_v2', JSON.stringify(friendsList));
+                input.value = '';
+                renderFriendList();
+
+                // 順便直接建立好連線，馬上可以聊天或邀請！
+                pvpConn = probeConn;
+                isPvpGuest = true;
+                activeFriendName = name;
+                setupPvpConnection();
+                statusEl.innerText = `✅ 驗證成功！已將【${name}】加入好友並連線！`;
+            });
         }
 
         function removeFriend(idx) {
