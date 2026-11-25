@@ -19,7 +19,7 @@
 
         body {
             background-color: #1a110a; color: var(--wood-dark);
-            font-family: 'Yozai', '新細明體', serif;
+            font-family: 'Microsoft JhengHei', 'Yozai', '微軟正黑體', serif;
             display: flex; justify-content: center; align-items: center;
             height: 100vh; width: 100vw; overflow: hidden;
             touch-action: none;
@@ -49,37 +49,26 @@
         }
 
         .lobby-grid {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: stretch;
-            gap: 20px;
-            width: 100%;
-            max-width: 920px;
-            height: 540px;
+            display: flex; flex-direction: row; justify-content: center;
+            align-items: stretch; gap: 20px; width: 100%; max-width: 920px; height: 540px;
         }
 
         .lobby-card {
-            flex: 1;
-            min-width: 0;
-            background: var(--parchment);
-            border: 6px solid var(--wood-light);
-            border-radius: 12px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
+            flex: 1; min-width: 0; background: var(--parchment);
+            border: 6px solid var(--wood-light); border-radius: 12px; padding: 20px;
+            display: flex; flex-direction: column;
             box-shadow: 0 10px 25px rgba(0,0,0,0.7), inset 0 0 20px rgba(139, 69, 19, 0.2);
         }
 
         .lobby-card h2 {
-            font-size: 1.6rem; color: var(--wood-dark); border-bottom: 3px dashed var(--wood-light);
-            padding-bottom: 8px; margin-bottom: 16px; text-align: center;
+            font-size: 1.55rem; color: var(--wood-dark); border-bottom: 3px dashed var(--wood-light);
+            padding-bottom: 8px; margin-bottom: 14px; text-align: center;
         }
 
         .form-group { margin-bottom: 14px; display: flex; flex-direction: column; gap: 6px; }
-        .form-group label { font-weight: bold; font-size: 1.1rem; }
+        .form-group label { font-weight: bold; font-size: 1.05rem; }
         .lobby-input {
-            padding: 10px 12px; font-size: 1.1rem; border: 3px solid var(--wood-light);
+            padding: 10px 12px; font-size: 1.05rem; border: 3px solid var(--wood-light);
             border-radius: 8px; background: #fffdf7; color: var(--wood-dark);
             font-family: inherit; user-select: text;
         }
@@ -87,7 +76,7 @@
         .lobby-btn {
             background: var(--wood-light); color: var(--parchment);
             border: 3px solid var(--brass); border-radius: 8px;
-            padding: 11px 18px; font-size: 1.2rem; font-weight: bold;
+            padding: 11px 18px; font-size: 1.15rem; font-weight: bold;
             cursor: pointer; box-shadow: 0 4px 0 var(--wood-dark); font-family: inherit;
             transition: all 0.1s; text-align: center;
         }
@@ -105,10 +94,13 @@
             display: flex; justify-content: space-between; align-items: center;
             background: #fff; border: 2px solid #c19a6b; border-radius: 6px; padding: 8px 12px;
         }
-	#login-form-area {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
+        #login-form-area { display: flex; flex-direction: column; width: 100%; }
+
+        /* PVP 鎖定狀態樣式 */
+        .pvp-locked {
+            opacity: 0.42 !important;
+            pointer-events: none !important;
+            filter: grayscale(85%);
         }
 
         /* ================= ⚔️ 戰鬥區域 ================= */
@@ -122,6 +114,16 @@
 
         canvas { display: block; width: 100%; height: 100%; }
         .ui-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+
+        /* PVP 頂部對戰橫幅 */
+        #pvp-banner {
+            position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(90deg, #1565c0, #3e2723, #b71c1c);
+            color: #fff; border: 2px solid var(--brass); border-radius: 20px;
+            padding: 3px 16px; font-size: 0.92rem; font-weight: bold;
+            display: none; z-index: 480; white-space: nowrap;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.6);
+        }
 
         /* DPS 傷害統計表 */
         #dps-overlay {
@@ -202,7 +204,7 @@
         .summon-btn.enemy-card { border-color: #4a0000; background: #5a2222; }
         .summon-btn.enemy-card:hover { background: #7a2e2e; }
 
-        .summon-icon {
+                .summon-icon {
             width: 100%; height: 82%; background-size: contain; background-position: center bottom;
             background-repeat: no-repeat; position: absolute; top: 4px; left: 0;
         }
@@ -301,6 +303,13 @@
         .utility-btn.active { background: var(--blood-red); color: white; border-color: #4a0000; }
         .utility-btn.hero-active { background: #1565c0; color: white; border-color: #0d47a1; }
 
+        /* PVP 鎖定沙盒外掛樣式 */
+        .pvp-locked {
+            opacity: 0.35 !important;
+            pointer-events: none !important;
+            filter: grayscale(90%);
+        }
+
         /* 彈出式「數值設定」視窗 */
         .modal-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -361,8 +370,24 @@
             background: var(--wood-light); border: 2px solid var(--wood-dark); color: var(--parchment);
             border-radius: 8px; width: 40px; height: 40px; font-size: 1.2rem; cursor: pointer;
             display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 0 var(--wood-dark);
+            position: relative;
         }
         .control-btn:hover { background-color: #795548; }
+
+        /* 大廳新訊息/邀請紅點 */
+        .lobby-badge {
+            display: none; position: absolute; top: -6px; right: -6px;
+            background: #ff1744; color: #fff; font-size: 0.72rem; font-weight: bold;
+            padding: 2px 5px; border-radius: 10px; border: 2px solid #fff;
+        }
+
+        /* PVP 狀態橫幅 */
+        #pvp-banner {
+            display: none; position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+            background: rgba(139, 0, 0, 0.9); color: #ffd54f; border: 2px solid var(--brass);
+            border-radius: 20px; padding: 3px 16px; font-size: 0.9rem; font-weight: bold;
+            z-index: 480; white-space: nowrap; pointer-events: auto;
+        }
 
         /* Boss 血條與提示 */
         .boss-hp-container {
@@ -383,7 +408,8 @@
         }
         .wave-announcement.show { opacity: 1; transform: scale(1); }
     </style>
-    <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+        <!-- 優先載入本地 peerjs.min.js（防學校網路擋 CDN），失敗時自動退回 CDN -->
+    <script src="./peerjs.min.js" onerror="var s=document.createElement('script');s.src='https://unpkg.com;"></script>
 </head>
 <body>
 
@@ -414,13 +440,13 @@
                     <div id="logged-in-panel" style="display: none; flex-direction: column; gap: 12px; margin-top: 8px;">
                         <div style="background: rgba(46,125,50,0.15); border: 2px solid var(--health-green); padding: 12px; border-radius: 8px; text-align: center;">
                             <div style="font-size: 1.3rem; font-weight: bold; color: var(--health-green);">歡迎回來，<span id="display-username"></span>！</div>
-                            <div style="font-size: 0.95rem; margin-top: 4px;">狀態：已連線至沙盒公會伺服器</div>
+                            <div style="font-size: 0.95rem; margin-top: 4px;">狀態：<span id="lobby-conn-badge" class="status-badge">連線中...</span></div>
                         </div>
                         <button class="lobby-btn" onclick="logoutUser()">🚪 登出切換帳號</button>
                     </div>
 
                     <div style="margin-top: auto; border-top: 2px dashed var(--wood-light); padding-top: 14px; display: flex; flex-direction: column; gap: 10px;">
-                        <button class="lobby-btn green" style="font-size: 1.35rem; padding: 14px;" onclick="enterSandbox()">🚀 進入沙盒戰場</button>
+                        <button class="lobby-btn green" style="font-size: 1.35rem; padding: 14px;" onclick="enterSandbox()">🚀 進入單人沙盒戰場</button>
                     </div>
                 </div>
 
@@ -461,13 +487,13 @@
                 </div>
             </div>
         </div>
-
-                        <!-- ================= ⚔️ 遊戲主畫面 ================= -->
+        <!-- ================= ⚔️ 遊戲主畫面 ================= -->
         <div id="speed-controls">
             <button class="speed-btn active" onclick="setGameSpeed(1, this)">1x</button>
             <button class="speed-btn" onclick="setGameSpeed(2, this)">2x</button>
             <button class="speed-btn" onclick="setGameSpeed(4, this)">4x</button>
             <button class="speed-btn" style="color:#FFCDD2;" onclick="setGameSpeed(0, this)">⏸ 暫停</button>
+            <span id="pvp-match-banner" style="display:none; background:#b71c1c; color:#fff; border:2px solid #ffd54f; border-radius:6px; padding:2px 10px; font-weight:bold; font-size:0.88rem; align-items:center;">⚔️ PVP 對戰中</span>
         </div>
 
         <div id="top-controls">
@@ -476,7 +502,7 @@
             <button id="fullscreen-btn" class="control-btn" onclick="toggleFullscreen()" title="全螢幕">⛶</button>
         </div>
 
-        <!-- 戰鬥區域 -->
+        <!-- 戰鬥區域與控制面板（完整程式碼請參閱原始文件） -->
         <div id="combat-area">
             <canvas id="gameCanvas" width="984" height="310"></canvas>
             <div class="ui-layer">
@@ -532,7 +558,7 @@
             <div id="sandbox-main-area">
                 <div class="middle-controls-row">
                     <!-- 關卡切換 (支援最高 Wave 100+ 與直接輸入跳關) -->
-                    <div class="wave-selector-box">
+                    <div id="wave-box" class="wave-selector-box">
                         <div style="font-weight: bold; font-size: 0.95rem; color: var(--wood-light);">關卡波次 (1~100+)</div>
                         <div class="wave-nav">
                             <button class="wave-arrow-btn" onclick="changeWave(-1)">◀</button>
@@ -552,7 +578,7 @@
                     </div>
 
                     <!-- 敵方 -->
-                    <div class="summon-group-box enemy-box">
+                    <div id="enemy-summon-box" class="summon-group-box enemy-box">
                         <div class="group-header" style="color: var(--blood-red);"><span>SUMMON (敵方 · 全兵種)</span></div>
                         <div class="cards-wrap" id="enemy-cards-box"></div>
                     </div>
@@ -561,13 +587,13 @@
                 <!-- 底部多功能按鈕列 -->
                 <div class="bottom-settings-row">
                     <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                        <button class="utility-btn" onclick="healAllBases()">🏰 主堡回血</button>
+                        <button id="btn-heal-base" class="utility-btn" onclick="healAllBases()">🏰 主堡回血</button>
                         <button id="player-mode-btn" class="utility-btn" onclick="togglePlayerMode()">🕹️ 親自參戰: 關</button>
-                        <button id="hand-mode-btn" class="utility-btn" onclick="toggleHandMode()">👆 上帝之手: 關</button>
-                        <button id="delete-mode-btn" class="utility-btn" onclick="toggleDeleteMode()">🗑️ 刪除模式: 關</button>
+                        <button id="btn-hand-mode" class="utility-btn" onclick="toggleHandMode()">👆 上帝之手: 關</button>
+                        <button id="btn-delete-mode" class="utility-btn" onclick="toggleDeleteMode()">🗑️ 刪除模式: 關</button>
                     </div>
-                    <button class="big-setting-btn" onclick="openStatsModal()">⚙️ 數值設定</button>
-                    <button class="utility-btn" onclick="clearBattlefield()">🧹 清空</button>
+                    <button id="btn-open-stats" class="big-setting-btn" onclick="openStatsModal()">⚙️ 數值設定</button>
+                    <button id="btn-clear-field" class="utility-btn" onclick="clearBattlefield()">🧹 清空</button>
                 </div>
             </div>
         </div>
@@ -627,6 +653,37 @@
         let activeFriendName = null;
         let isBattleAccepted = false;
         let friendsList = JSON.parse(localStorage.getItem('sandbox_friends_v2') || '[]');
+        let remoteHero = null; // PVP 對手的「親自參戰」角色
+
+        function setPvpMode(active) {
+            isBattleAccepted = active;
+            const banner = document.getElementById('pvp-match-banner');
+            if (banner) {
+                banner.style.display = active ? 'inline-flex' : 'none';
+                banner.innerText = active
+                    ? `⚔️ PVP 對戰中（你是${isPvpGuest ? '右方紅隊' : '左方藍隊'}）`
+                    : '⚔️ PVP 對戰中';
+            }
+
+            // PVP 時鎖定沙盒外掛功能，確保公平與雙端同步
+            const lockIds = [
+                'speed-controls', 'chaos-controls', 'wave-box',
+                'enemy-summon-box', 'btn-heal-base', 'btn-hand-mode',
+                'btn-delete-mode', 'btn-open-stats', 'btn-clear-field'
+            ];
+            lockIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.toggle('pvp-locked', active);
+            });
+
+            if (active) {
+                setGameSpeed(1, document.querySelector('#speed-controls .speed-btn'));
+                if (handMode) toggleHandMode();
+                if (deleteMode) toggleDeleteMode();
+                ALLY_CLASSES = JSON.parse(JSON.stringify(DEFAULT_ALLY_CLASSES));
+                ENEMY_CLASSES = JSON.parse(JSON.stringify(DEFAULT_ENEMY_CLASSES));
+            }
+        }
 
         function updateLobbyUI() {
             const formArea = document.getElementById('login-form-area');
@@ -679,19 +736,31 @@
         function logoutUser() {
             currentUser = null;
             localStorage.removeItem('sandbox_current_user');
+            setPvpMode(false);
             if (peer) { peer.destroy(); peer = null; }
             updateLobbyUI();
         }
 
-        function openLobby() { document.getElementById('lobby-screen').classList.remove('hidden'); }
+        function openLobby() {
+            if (isBattleAccepted && pvpConn && pvpConn.open) {
+                if (!confirm('目前正在 PVP 對戰中，返回大廳將結束這場對戰，確定要離開嗎？')) return;
+                pvpConn.send({ type: 'forfeit', from: currentUser });
+                setPvpMode(false);
+            }
+            document.getElementById('lobby-screen').classList.remove('hidden');
+        }
 
         function enterSandbox() { document.getElementById('lobby-screen').classList.add('hidden'); }
 
-        // 1. 登入後自動用「自己的帳號名稱」上線，讓朋友不用房號就能直接找到你！
         function initOnlinePresence() {
             const statusEl = document.getElementById('pvp-status-msg');
+            const badge = document.getElementById('lobby-conn-badge');
             if (!currentUser) {
                 statusEl.innerText = '⚠️ 請先在左側註冊/登入帳號，才能接收好友邀請與聊天！';
+                return;
+            }
+            if (typeof Peer === 'undefined') {
+                statusEl.innerText = '❌ PeerJS 尚未載入成功，請確認 peerjs.min.js 檔案位置';
                 return;
             }
             const safeId = 'hmrpg-user-' + encodeURIComponent(currentUser);
@@ -699,43 +768,39 @@
             if (peer) peer.destroy();
 
             statusEl.innerText = '⏳ 正在連線至公會大廳...';
+            if (badge) { badge.innerText = '連線中...'; badge.classList.add('offline'); }
             peer = new Peer(safeId);
 
             peer.on('open', () => {
                 statusEl.innerText = `🟢 已上線！你的 ID：【${currentUser}】（朋友可直接搜此名連線）`;
+                if (badge) { badge.innerText = '🟢 公會連線中'; badge.classList.remove('offline'); }
             });
 
-            // 收到朋友主動連過來（聊天或邀請）
             peer.on('connection', (conn) => {
+                if (pvpConn && pvpConn.open && pvpConn !== conn) pvpConn.close();
                 pvpConn = conn;
-                isPvpGuest = false; // 被連的人(房主)為左方藍隊
+                isPvpGuest = false;
                 setupPvpConnection();
             });
 
             peer.on('error', (err) => {
-                statusEl.innerText = `⚠️ 連線提示：${err.type === 'peer-unavailable' ? '對方目前不在線或帳號打錯' : err.type}`;
+                if (badge) { badge.innerText = '🔴 連線異常'; badge.classList.add('offline'); }
+                statusEl.innerText = `⚠️ 連線提示：${err.type === 'peer-unavailable' ? '對方目前不在線或帳號打錯' : (err.type === 'unavailable-id' ? '此帳號已在其他視窗登入！' : err.type)}`;
             });
         }
 
         function addFriend() {
-            // 1. 沒登入不准加好友！
-            if (!currentUser) {
-                alert('⚠️ 請先在左側註冊並登入帳號，才能使用加好友功能！');
-                return;
-            }
-
+            if (!currentUser) { alert('⚠️ 請先在左側註冊並登入帳號，才能使用加好友功能！'); return; }
             const input = document.getElementById('friend-name-input');
             const name = input.value.trim();
             if (!name) return;
             if (name === currentUser) { alert('⚠️ 不能加自己為好友！'); return; }
             if (friendsList.some(f => f.name === name)) { alert('⚠️ 這位好友已經在名單裡了！'); return; }
-
             if (!peer || peer.destroyed) initOnlinePresence();
 
             const statusEl = document.getElementById('pvp-status-msg');
             statusEl.innerText = `🔍 正在驗證玩家【${name}】是否存在並在線...`;
 
-            // 2. 向 PeerJS 真實探测這個帳號有沒有上線
             const targetId = 'hmrpg-user-' + encodeURIComponent(name);
             const probeConn = peer.connect(targetId);
             let verified = false;
@@ -756,7 +821,7 @@
                 input.value = '';
                 renderFriendList();
 
-                // 順便直接建立好連線，馬上可以聊天或邀請！
+                if (pvpConn && pvpConn.open && pvpConn !== probeConn) pvpConn.close();
                 pvpConn = probeConn;
                 isPvpGuest = true;
                 activeFriendName = name;
@@ -786,7 +851,7 @@
                 div.innerHTML = `
                     <div style="font-weight: bold; font-size: 1rem;">${isConnected ? '🟢' : '⚪'} ${f.name}</div>
                     <div style="display:flex; gap: 4px;">
-                        ${isConnected
+                                                ${isConnected
                             ? `<button class="lobby-btn green" style="padding: 3px 8px; font-size: 0.85rem;" onclick="sendRealInvite()">⚔️ 邀請對戰</button>`
                             : `<button class="lobby-btn" style="padding: 3px 8px; font-size: 0.85rem;" onclick="connectToFriend('${f.name}')">🔗 連線</button>`
                         }
@@ -797,20 +862,19 @@
             });
         }
 
-        // 2. 直接透過朋友帳號名稱連線（免房號！）
         function connectToFriend(friendName) {
             if (!currentUser) { alert('請先在左側登入你的帳號！'); return; }
             if (!peer || peer.destroyed) initOnlinePresence();
             document.getElementById('pvp-status-msg').innerText = `⏳ 正在呼叫【${friendName}】...`;
 
+            if (pvpConn && pvpConn.open) pvpConn.close();
             const targetId = 'hmrpg-user-' + encodeURIComponent(friendName);
             pvpConn = peer.connect(targetId);
-            isPvpGuest = true; // 主動連過去的人為右方紅隊
+            isPvpGuest = true;
             activeFriendName = friendName;
             setupPvpConnection();
         }
 
-        // 3. 發送真正的即時邀請彈窗給對方
         function sendRealInvite() {
             if (!pvpConn || !pvpConn.open) { alert('請先點好友旁的「🔗 連線」！'); return; }
             pvpConn.send({ type: 'invite', from: currentUser });
@@ -822,16 +886,16 @@
             if (!pvpConn || !pvpConn.open) return;
             pvpConn.send({ type: 'invite_reply', accepted, from: currentUser });
             if (accepted) {
-                isBattleAccepted = true;
                 enterSandbox();
                 clearBattlefield();
+                baseHp = 500; enemyBaseHp = 500;
+                setPvpMode(true);
                 showAnnouncement(`⚔️ PVP 開始！你是${isPvpGuest ? '右方(紅隊)' : '左方(藍隊)'}`, '#4caf50');
             } else {
                 appendChatSystem(`❌ 你拒絕了【${activeFriendName}】的對戰邀請。`);
             }
         }
 
-        // 4. 大廳即時聊天功能
         function sendChatMsg() {
             const input = document.getElementById('chat-input');
             const text = input.value.trim();
@@ -888,30 +952,57 @@
                     document.getElementById('invite-popup').style.display = 'block';
                 } else if (data.type === 'invite_reply') {
                     if (data.accepted) {
-                        isBattleAccepted = true;
                         enterSandbox();
                         clearBattlefield();
+                        baseHp = 500; enemyBaseHp = 500;
+                        setPvpMode(true);
                         showAnnouncement(`⚔️ ${data.from} 接受了邀請！開始對決！`, '#4caf50');
                     } else {
                         appendChatSystem(`😢 【${data.from}】拒絕了你的對戰邀請。`);
                     }
                 } else if (data.type === 'spawn') {
-                    if (data.team === 0) _localSpawnAlly(data.key);
-                    else _localSpawnEnemy(data.key);
-                } else if (data.type === 'clear') {
-                    clearBattlefield();
+                    if (data.team === 0) _localSpawnAlly(data.key, data.y);
+                    else _localSpawnEnemy(data.key, data.y);
+                } else if (data.type === 'hero_spawn') {
+                    if (remoteHero) remoteHero.state = 'dead';
+                    const heroCfg = {
+                        classKey: 'swordsman', name: `👑${data.name}`,
+                        hp: 600, dmg: 65, range: 65, speed: 165, atkSpeed: 260,
+                        color: '#ff5252', size: 1.25, nativeTeam: 0, isRemoteHero: true
+                    };
+                    remoteHero = new Entity(data.x, data.y, data.team, heroCfg, 'swordsman');
+                    entities.push(remoteHero);
+                } else if (data.type === 'hero_sync') {
+                    if (remoteHero && remoteHero.state !== 'dead') {
+                        remoteHero.x = data.x;
+                        remoteHero.y = data.y;
+                        remoteHero.facing = data.facing;
+                        remoteHero.state = data.state;
+                    }
+                } else if (data.type === 'hero_attack') {
+                    if (remoteHero && remoteHero.state !== 'dead') {
+                        executeHeroSlash(remoteHero);
+                    }
+                } else if (data.type === 'hero_despawn') {
+                    if (remoteHero) { remoteHero.state = 'dead'; remoteHero = null; }
+                } else if (data.type === 'hp_sync') {
+                    baseHp = data.baseHp;
+                    enemyBaseHp = data.enemyBaseHp;
+                } else if (data.type === 'forfeit') {
+                    setPvpMode(false);
+                    showAnnouncement(`🏆 對手【${data.from}】已離開，你獲勝了！`, '#ffd700');
                 }
             });
 
             pvpConn.on('close', () => {
+                if (isBattleAccepted) showAnnouncement('⚠️ 對手已斷線，結束 PVP 模式', '#ff9800');
+                setPvpMode(false);
                 activeFriendName = null;
-                isBattleAccepted = false;
                 document.getElementById('chat-target-label').innerText = '未連線';
                 renderFriendList();
                 appendChatSystem('⚠️ 好友已離線或斷開連線');
             });
         }
-
         // ================= ⚔️ 戰鬥引擎核心 =================
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
@@ -1012,7 +1103,6 @@
             img.src = url; loadedSprites[key] = img;
         }
 
-        // 1. 🔫 機關槍人調整為「AK-47兵」（點射 4 連發 + 高機動性）
         const DEFAULT_ALLY_CLASSES = {
             'swordsman': { classKey: 'swordsman', name: '劍士', hp: 50, dmg: 10, range: 40, speed: 42, atkSpeed: 1500, color: '#e67e22', size: 1.0, nativeTeam: 0 },
             'defender':  { classKey: 'defender',  name: '盾戰士', hp: 120, dmg: 2, range: 35, speed: 25, atkSpeed: 2250, color: '#7f8c8d', size: 1.1, nativeTeam: 0 },
@@ -1052,13 +1142,13 @@
         let shakePower = 0;
         const CRIT_THRESHOLD = 300;
 
-        // 互動模式狀態
         let handMode = false;
         let deleteMode = false;
         let grabbedEntity = null;
 
-        // 4. 🕹️ 玩家親自操控角色 (勇者指揮官)
+        // 🕹️ 玩家親自操控角色 (支援雙人 PVP 即時同步)
         let playerHero = null;
+        let lastHeroSyncTime = 0;
         const keysPressed = {};
 
         window.addEventListener('keydown', (e) => {
@@ -1069,7 +1159,7 @@
                 playerHeroAttack();
             }
         });
-        window.addEventListener('keyup', (e) => {
+                window.addEventListener('keyup', (e) => {
             keysPressed[e.key.toLowerCase()] = false;
         });
 
@@ -1084,6 +1174,7 @@
                 btn.innerText = '🕹️ 親自參戰: 關';
                 hud.style.display = 'none';
                 pad.style.display = 'none';
+                if (pvpConn && pvpConn.open) pvpConn.send({ type: 'hero_despawn' });
             } else {
                 const startTeam = (pvpConn && pvpConn.open && isPvpGuest) ? 1 : 0;
                 const startX = startTeam === 0 ? 160 : canvas.width - 160;
@@ -1094,43 +1185,55 @@
                     color: '#ffd700', size: 1.25, nativeTeam: 0, isPlayerControlled: true
                 };
                 playerHero = new Entity(startX, canvas.height * 0.78, startTeam, heroCfg, 'swordsman');
+                playerHero.facing = startTeam === 0 ? 1 : -1;
                 entities.push(playerHero);
                 btn.classList.add('hero-active');
                 btn.innerText = '🕹️ 親自參戰: 開';
                 hud.style.display = 'block';
                 pad.style.display = 'flex';
+                if (pvpConn && pvpConn.open) {
+                    pvpConn.send({ type: 'hero_spawn', name: currentUser || '勇者', x: startX, y: playerHero.y, team: startTeam });
+                }
             }
         }
 
-        function playerHeroAttack() {
-            if (!playerHero || playerHero.state === 'dead' || playerHero.atkTimer > 0) return;
-            playerHero.atkTimer = 280;
-            playerHero.state = 'attack';
+        function executeHeroSlash(heroEnt) {
+            if (!heroEnt || heroEnt.state === 'dead') return;
+            heroEnt.atkTimer = 280;
+            heroEnt.state = 'attack';
             if (!isMuted) grabSound.play().catch(()=>{});
-            const hitX = playerHero.x + (playerHero.facing >= 0 ? 35 : -35);
-            effects.push(new Effect(hitX, playerHero.y, 'slash', '#ffd700'));
-            createParticleExplosion(hitX, playerHero.y - 20, '#ffd700', 8);
+            const hitX = heroEnt.x + (heroEnt.facing >= 0 ? 35 : -35);
+            effects.push(new Effect(hitX, heroEnt.y, 'slash', heroEnt.config.color || '#ffd700'));
+            createParticleExplosion(hitX, heroEnt.y - 20, heroEnt.config.color || '#ffd700', 8);
 
             let hitAny = false;
             entities.forEach(e => {
-                if (e.team !== playerHero.team && e.state !== 'dead') {
-                    const dist = Math.hypot(e.x - hitX, e.y - playerHero.y);
+                if (e.team !== heroEnt.team && e.state !== 'dead') {
+                    const dist = Math.hypot(e.x - hitX, e.y - heroEnt.y);
                     if (dist <= 65) {
                         hitAny = true;
-                        const kill = e.takeDamage(playerHero.dmg) ? 1 : 0;
-                        updateUnitStats(playerHero.statId, playerHero.statLabel, playerHero.dmg, kill);
+                        const kill = e.takeDamage(heroEnt.dmg) ? 1 : 0;
+                        updateUnitStats(heroEnt.statId, heroEnt.statLabel, heroEnt.dmg, kill);
                         if (!e.isBoss) {
-                            const dir = playerHero.team === 0 ? 1 : -1;
+                            const dir = heroEnt.team === 0 ? 1 : -1;
                             e.x = Math.max(70, Math.min(canvas.width - 70, e.x + 25 * dir));
                         }
                     }
                 }
             });
-            const targetBaseX = playerHero.team === 0 ? (canvas.width - 80) : 80;
+            const targetBaseX = heroEnt.team === 0 ? (canvas.width - 80) : 80;
             if (!hitAny && Math.abs(targetBaseX - hitX) <= 65) {
-                if (playerHero.team === 0) enemyBaseHp = Math.max(0, enemyBaseHp - playerHero.dmg);
-                else baseHp = Math.max(0, baseHp - playerHero.dmg);
-                updateUnitStats(playerHero.statId, playerHero.statLabel, playerHero.dmg, 0);
+                if (heroEnt.team === 0) enemyBaseHp = Math.max(0, enemyBaseHp - heroEnt.dmg);
+                else baseHp = Math.max(0, baseHp - heroEnt.dmg);
+                updateUnitStats(heroEnt.statId, heroEnt.statLabel, heroEnt.dmg, 0);
+            }
+        }
+
+        function playerHeroAttack() {
+            if (!playerHero || playerHero.state === 'dead' || playerHero.atkTimer > 0) return;
+            executeHeroSlash(playerHero);
+            if (pvpConn && pvpConn.open) {
+                pvpConn.send({ type: 'hero_attack' });
             }
         }
 
@@ -1164,7 +1267,6 @@
                 dpsTbody.appendChild(tr);
             });
         }
-
         function triggerScreenShake(power = 6, duration = 150) {
             if (gameSpeed === 0) return;
             shakePower = power;
@@ -1259,7 +1361,7 @@
             if (blackHole.timer <= 0) { blackHole = null; return; }
 
             entities.forEach(e => {
-                if (e.state !== 'dead' && !e.isGrabbed && !e.isBoss && !e.config.isPlayerControlled) {
+                if (e.state !== 'dead' && !e.isGrabbed && !e.isBoss && !e.config.isPlayerControlled && !e.config.isRemoteHero) {
                     const dx = blackHole.x - e.x;
                     const dy = blackHole.y - e.y;
                     const dist = Math.hypot(dx, dy);
@@ -1304,8 +1406,8 @@
         function toggleHandMode() {
             handMode = !handMode;
             grabbedEntity = null;
-            if (handMode && deleteMode) toggleDeleteMode(); // 互斥
-            const btn = document.getElementById('hand-mode-btn');
+            if (handMode && deleteMode) toggleDeleteMode();
+            const btn = document.getElementById('btn-hand-mode'); // 這裡改成 btn-hand-mode
             btn.classList.toggle('active', handMode);
             btn.innerText = handMode ? '👆 上帝之手: 開' : '👆 上帝之手: 關';
             combatArea.classList.toggle('grabbing-mode', handMode);
@@ -1313,12 +1415,13 @@
 
         function toggleDeleteMode() {
             deleteMode = !deleteMode;
-            if (deleteMode && handMode) toggleHandMode(); // 互斥
-            const btn = document.getElementById('delete-mode-btn');
+            if (deleteMode && handMode) toggleHandMode();
+            const btn = document.getElementById('btn-delete-mode'); // 這裡改成 btn-delete-mode
             btn.classList.toggle('active', deleteMode);
             btn.innerText = deleteMode ? '🗑️ 刪除模式: 開' : '🗑️ 刪除模式: 關';
             combatArea.classList.toggle('delete-mode', deleteMode);
         }
+
 
         function getEventPos(e) {
             const rect = canvas.getBoundingClientRect();
@@ -1335,7 +1438,6 @@
         function handleCanvasMouseDown(e) {
             const pos = getEventPos(e);
 
-            // 2. 🗑️ 刪除模式：點擊單位直接移除！
             if (deleteMode) {
                 let targetToDel = null;
                 let minDist = 42;
@@ -1356,7 +1458,6 @@
                 return;
             }
 
-            // 👆 上帝之手抓取
             if (!handMode || grabbedEntity || gameSpeed === 0) return;
             let closest = null;
             let minDist = 35;
@@ -1397,7 +1498,6 @@
             setTimeout(() => announcer.classList.remove('show'), 1100);
         }
 
-        // 5. 🌊 波次切換 (支援 Wave 1 ~ 100+ 與直接輸入跳波)
         function applyWaveSettings(newWave) {
             wave = Math.max(1, Math.min(999, parseInt(newWave) || 1));
             const bgIndex = ((wave - 1) % 5) + 1;
@@ -1407,24 +1507,20 @@
             showAnnouncement(`Wave ${wave}`);
         }
 
-        function changeWave(delta) {
-            applyWaveSettings(wave + delta);
-        }
-
-        function jumpToWave(val) {
-            applyWaveSettings(val);
-        }
-
+        function changeWave(delta) { applyWaveSettings(wave + delta); }
+        function jumpToWave(val) { applyWaveSettings(val); }
         function toggleAutoEnemy() { autoEnemySpawn = document.getElementById('auto-enemy-chk').checked; }
         function healAllBases() { baseHp = 500; enemyBaseHp = 300 + (wave-1)*150; showAnnouncement('🏰 修復主堡！', '#4CAF50'); }
         function clearBattlefield() {
             entities = []; projectiles = []; auras = []; meteors = []; blackHole = null;
             currentBoss = null; bossHpBarContainer.style.display = 'none';
+            remoteHero = null;
             if (playerHero) {
                 playerHero = null;
                 document.getElementById('player-mode-btn').classList.remove('hero-active');
                 document.getElementById('player-mode-btn').innerText = '🕹️ 親自參戰: 關';
                 document.getElementById('player-hud').style.display = 'none';
+                document.getElementById('virtual-pad').style.display = 'none';
             }
             dpsData = {}; renderDpsTable();
             showAnnouncement('🧹 戰場已清空', '#4FC3F7');
@@ -1484,6 +1580,8 @@
                 ctx.fillStyle = 'rgba(241, 196, 15, 0.15)'; ctx.fill(); ctx.restore();
             }
         }
+
+
 
         function triggerAreaExplosion(x, y, aoeRadius, dmg, team, isKamikaze=false, statId=null, statLabel=null) {
             effects.push(new Effect(x, y, 'explosion', isKamikaze ? '#ffd700' : '#ff5722'));
@@ -1585,7 +1683,6 @@
                     ctx.beginPath(); ctx.moveTo(-18, 0); ctx.lineTo(12, 0); ctx.stroke();
                     ctx.fillStyle = '#fff'; ctx.fillRect(6, -2, 8, 4);
                 } else if (this.type === 'ak_bullet') {
-                    // 🔫 AK-47 步槍銅色曳光彈
                     ctx.fillStyle = '#ffb300'; ctx.fillRect(-8, -1.8, 16, 3.6);
                     ctx.fillStyle = '#ffffff'; ctx.fillRect(4, -1.2, 5, 2.4);
                 } else if (this.type === 'rocket') {
@@ -1632,7 +1729,6 @@
                 ctx.restore();
             }
         }
-
         class Entity {
             constructor(x, y, team, config, key) {
                 this.x = x; this.y = y; this.team = team; this.config = config; this.key = key;
@@ -1663,19 +1759,20 @@
                 ctx.save(); ctx.translate(dx, dy);
                 if (this.state === 'walk') ctx.scale(1 - Math.sin(Date.now() * 0.01) * 0.05, 1 + Math.sin(Date.now() * 0.01) * 0.05);
 
-                // 玩家親自操控的金色光環與頭頂標記
-                if (this.config.isPlayerControlled) {
+                if (this.config.isPlayerControlled || this.config.isRemoteHero) {
+                    const hColor = this.config.isPlayerControlled ? '#ffd700' : '#ff5252';
                     ctx.beginPath(); ctx.ellipse(0, 0, this.width * 0.9, 11, 0, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(255, 215, 0, 0.45)'; ctx.fill();
-                    ctx.strokeStyle = '#ffd700'; ctx.lineWidth = 2; ctx.stroke();
-                    ctx.fillStyle = '#ffd700'; ctx.font = "bold 13px sans-serif"; ctx.textAlign = 'center';
-                    ctx.fillText('▼ YOU', 0, -this.height - 22);
+                    ctx.fillStyle = this.config.isPlayerControlled ? 'rgba(255, 215, 0, 0.45)' : 'rgba(255, 82, 82, 0.4)';
+                    ctx.fill();
+                    ctx.strokeStyle = hColor; ctx.lineWidth = 2; ctx.stroke();
+                    ctx.fillStyle = hColor; ctx.font = "bold 13px sans-serif"; ctx.textAlign = 'center';
+                    ctx.fillText(this.config.isPlayerControlled ? '▼ YOU' : `▼ ${this.config.name}`, 0, -this.height - 22);
                 } else if (this.config.isBoss) {
                     ctx.beginPath(); ctx.ellipse(0, 0, this.width, 15, 0, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255, 0, 0, 0.3)'; ctx.fill(); ctx.shadowColor = '#ff0000'; ctx.shadowBlur = 18;
                 }
                 ctx.fillStyle = 'rgba(0,0,0,0.4)'; ctx.beginPath(); ctx.ellipse(0, 0, this.width / 1.5, 8, 0, 0, Math.PI * 2); ctx.fill();
 
-                const needFlip = this.config.isPlayerControlled
+                const needFlip = (this.config.isPlayerControlled || this.config.isRemoteHero)
                     ? (this.facing < 0)
                     : (this.config.nativeTeam !== undefined && this.config.nativeTeam !== this.team);
                 ctx.save();
@@ -1703,7 +1800,10 @@
                 if (this.state === 'dead' || this.isGrabbed) return;
                 if (this.atkTimer > 0) this.atkTimer -= 16.6 * deltaFactor;
 
-                // 🕹️ 玩家手動控制移動
+                // 遠端對手的勇者化身由封包驅動位置
+                if (this.config.isRemoteHero) return;
+
+                // 🕹️ 玩家手動控制移動 + 每 50ms 同步座標給對手
                 if (this.config.isPlayerControlled) {
                     let vx = 0, vy = 0;
                     if (keysPressed['a'] || keysPressed['arrowleft']) { vx -= 1; this.facing = -1; }
@@ -1719,6 +1819,12 @@
                         if (this.atkTimer <= 0) this.state = 'walk';
                     } else if (this.atkTimer <= 0) {
                         this.state = 'idle';
+                    }
+
+                    const now = performance.now();
+                    if (pvpConn && pvpConn.open && now - lastHeroSyncTime > 50) {
+                        lastHeroSyncTime = now;
+                        pvpConn.send({ type: 'hero_sync', x: this.x, y: this.y, facing: this.facing, state: this.state });
                     }
                     return;
                 }
@@ -1746,7 +1852,6 @@
                 if (closest) this.target = closest;
                 else this.target = { isBase: true, y: this.y, state: 'alive' };
             }
-
             performAttack() {
                 this.atkTimer = this.atkSpeed;
                 const ownerCfg = ALLY_CLASSES[this.key] || ENEMY_CLASSES[this.key];
@@ -1790,7 +1895,6 @@
                         }, i * 200 / gameSpeed);
                     }
                 } else if (this.key === 'ak47') {
-                    // 🔫 AK-47 步槍 4 連發點射！
                     for (let i = 0; i < 4; i++) {
                         setTimeout(() => {
                             if (this.state !== 'dead' && gameSpeed > 0)
@@ -1836,8 +1940,11 @@
                     document.getElementById('player-mode-btn').classList.remove('hero-active');
                     document.getElementById('player-mode-btn').innerText = '🕹️ 親自參戰: 關';
                     document.getElementById('player-hud').style.display = 'none';
+                    document.getElementById('virtual-pad').style.display = 'none';
+                    if (pvpConn && pvpConn.open) pvpConn.send({ type: 'hero_despawn' });
                     showAnnouncement('💀 勇者化身陣亡！', '#ef5350');
                 }
+                if (this === remoteHero) remoteHero = null;
                 if (this.config.isBoss) {
                     triggerScreenShake(18, 500);
                     if (!isMuted) explodeSound.play().catch(()=>{});
@@ -1846,35 +1953,38 @@
             }
         }
 
-        function _localSpawnAlly(key) {
+        function _localSpawnAlly(key, customY = null) {
             const cls = ALLY_CLASSES[key];
-            const y = (canvas.height * 0.78) + (Math.random() * 34 - 17);
+            const y = customY !== null ? customY : (canvas.height * 0.78) + (Math.random() * 34 - 17);
             entities.push(new Entity(90, y, 0, cls, key));
             createParticleExplosion(90, y, '#3498db', 10);
+            return y;
         }
 
-        function _localSpawnEnemy(key) {
+        function _localSpawnEnemy(key, customY = null) {
             const cls = ENEMY_CLASSES[key] || ALLY_CLASSES[key];
-            const y = (canvas.height * 0.78) + (Math.random() * 34 - 17);
+            const y = customY !== null ? customY : (canvas.height * 0.78) + (Math.random() * 34 - 17);
             const enemy = new Entity(canvas.width - 100, y, 1, cls, key);
             entities.push(enemy);
             if (cls.isBoss) { currentBoss = enemy; updateBossUI(); bossWarning(); }
             else createParticleExplosion(canvas.width - 100, y, '#e74c3c', 10, 1);
+            return y;
         }
 
         function spawnAlly(key) {
             if (pvpConn && pvpConn.open && isPvpGuest) {
-                _localSpawnEnemy(key);
-                pvpConn.send({ type: 'spawn', team: 1, key });
+                const y = _localSpawnEnemy(key);
+                pvpConn.send({ type: 'spawn', team: 1, key, y });
                 return;
             }
-            _localSpawnAlly(key);
-            if (pvpConn && pvpConn.open) pvpConn.send({ type: 'spawn', team: 0, key });
+            const y = _localSpawnAlly(key);
+            if (pvpConn && pvpConn.open) pvpConn.send({ type: 'spawn', team: 0, key, y });
         }
 
         function spawnEnemy(key) {
-            _localSpawnEnemy(key);
-            if (pvpConn && pvpConn.open) pvpConn.send({ type: 'spawn', team: 1, key });
+            if (isBattleAccepted) return; // PVP 公平對戰時禁止手動召喚敵軍與 Boss
+            const y = _localSpawnEnemy(key);
+            if (pvpConn && pvpConn.open) pvpConn.send({ type: 'spawn', team: 1, key, y });
         }
 
         function bossWarning() {
@@ -1913,7 +2023,7 @@
                 const b = document.createElement('div'); b.className = 'summon-btn enemy-card'; b.onclick = () => spawnEnemy(key); b.innerHTML = createButtonHTML(cls, key, true, false); enemyBox.appendChild(b);
             }
 
-            const sharedSpecialUnits = ['sniper', 'rpg', 'ak47', 'bomb'];
+                        const sharedSpecialUnits = ['sniper', 'rpg', 'ak47', 'bomb'];
             sharedSpecialUnits.forEach(key => {
                 const cls = ALLY_CLASSES[key];
                 const b = document.createElement('div');
@@ -1925,6 +2035,7 @@
         }
 
         function openStatsModal() {
+            if (isBattleAccepted) return;
             renderStatsTable('ally-stats-tbody', ALLY_CLASSES, 'ally');
             renderStatsTable('enemy-stats-tbody', ENEMY_CLASSES, 'enemy');
             document.getElementById('stats-modal-overlay').classList.remove('hidden');
@@ -1979,6 +2090,8 @@
         function resetDefaultStats() { ALLY_CLASSES = JSON.parse(JSON.stringify(DEFAULT_ALLY_CLASSES)); ENEMY_CLASSES = JSON.parse(JSON.stringify(DEFAULT_ENEMY_CLASSES)); renderStatsTable('ally-stats-tbody', ALLY_CLASSES, 'ally'); renderStatsTable('enemy-stats-tbody', ENEMY_CLASSES, 'enemy'); }
 
         let lastTime = performance.now();
+        let lastHpSyncTime = 0;
+
         function loop(timestamp) {
             let deltaTime = timestamp - lastTime;
             if (deltaTime > 100) deltaTime = 16.6;
@@ -1986,11 +2099,10 @@
             lastTime = timestamp;
 
             if (gameSpeed > 0) {
-                if (autoEnemySpawn) {
+                if (autoEnemySpawn && !isBattleAccepted) {
                     enemySpawnTimer += deltaTime * gameSpeed;
                     if (enemySpawnTimer >= 3500) {
                         enemySpawnTimer = 0;
-                        // 波次越高，自動出怪越常派高級小怪與 Boss！
                         if (wave >= 10 && Math.random() < 0.15) spawnEnemy('boss1');
                         else spawnEnemy(Math.random() > (0.75 - Math.min(0.5, wave * 0.01)) ? 'mo2' : 'mo1');
                     }
@@ -2013,6 +2125,20 @@
 
                 if (Math.random() < 0.02) entities = entities.filter(e => e.state !== 'dead');
                 if (Math.random() < 0.08) renderDpsTable();
+
+                // PVP 房主定期同步主堡血量並檢查勝負
+                if (isBattleAccepted && pvpConn && pvpConn.open) {
+                    if (!isPvpGuest && timestamp - lastHpSyncTime > 400) {
+                        lastHpSyncTime = timestamp;
+                        pvpConn.send({ type: 'hp_sync', baseHp, enemyBaseHp });
+                    }
+                    if (baseHp <= 0 || enemyBaseHp <= 0) {
+                        const leftWon = enemyBaseHp <= 0;
+                        const iWon = isPvpGuest ? !leftWon : leftWon;
+                        setPvpMode(false);
+                        showAnnouncement(iWon ? '🏆 PVP 勝利！摧毀敵方主堡！' : '💀 PVP 戰敗！我方主堡被摧毀！', iWon ? '#ffd700' : '#ef5350');
+                    }
+                }
 
                 if (isShaking) {
                     const sx = (Math.random() - 0.5) * shakePower;
@@ -2055,3 +2181,4 @@
     </script>
 </body>
 </html>
+
